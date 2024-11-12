@@ -4,7 +4,7 @@ import "./App.css";
 import { TONXJsonRpcProvider } from "@tonx/core";
 
 interface Transaction {
-  hash?: string;
+  transaction_hash?: string;
   [key: string]: any;
 }
 
@@ -12,7 +12,7 @@ interface Transaction {
 export default function App() {
   const [accountBalance, setAccountBalance] = useState<string>("No connection");
   const [lastTransaction, setLastTransaction] = useState<Transaction | string>("No connection");
-  const myTonAddress = "EQDi1eWU3HWWst8owY8OMq2Dz9nJJEHUROza8R-_wEGb8yu6";
+  const myUsdtAddress = "UQBm2-oK4u9CP56wS4LaPUWV-meDmNnSaD9Jlt-FyRHoBimJ";
 
   // Render a textarea component with dynamic values
   const renderTextArea = (label: string, value: string) => (
@@ -34,20 +34,14 @@ export default function App() {
   );
 
   // Step 1: init TONX client
-  const client = new TONXJsonRpcProvider({
-    network: "mainnet",
-    apiKey: "YOUR API KEY",
-  });
-
+  // Implement the function
   const handleConnectReload = async () => {
     try {
-      // Step 2: Fetch account balance
-      const balance = await client.getAccountBalance(myTonAddress);
-      setAccountBalance(balance);
+      // Step 2: Fetch the latest transfer-in
+      // Implement the function
 
-      // Step 3: Fetch the latest transaction
-      const transactions = await client.getTransactions({ account: myTonAddress });
-      setLastTransaction(transactions[1] || "No transaction found");
+      // Step 3: Fetch USDT balance
+      // Implement the function
     } catch (error) {
       setAccountBalance("Error fetching balance");
       setLastTransaction("Error fetching transaction");
@@ -75,19 +69,19 @@ export default function App() {
         </div>
 
         <hr />
-        <h1>Get My TON Transactions</h1>
+        <h1>Get My USDT Lastest transfer-in</h1>
         {renderTextArea("Balance", accountBalance)}
 
         <div style={{ marginBottom: "20px" }}>
           <label style={{ display: "block", marginBottom: "5px" }}>Last Transaction</label>
-          {typeof lastTransaction === "object" && lastTransaction?.hash ? (
+          {typeof lastTransaction === "object" && lastTransaction?.transaction_hash ? (
             <a
-              href={`https://tonviewer.com/${lastTransaction.hash}`}
+              href={`https://tonviewer.com/${lastTransaction.transaction_hash}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{ fontSize: "16px", color: "#61dafb" }}
             >
-              {lastTransaction.hash}
+              {lastTransaction.transaction_hash}
             </a>
           ) : (
             <textarea
