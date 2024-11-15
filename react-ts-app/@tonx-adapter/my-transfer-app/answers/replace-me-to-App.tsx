@@ -63,13 +63,13 @@ export default function App() {
         messages: [internal({
           value: "0.1",
           to: destination,
-          body: "Hello world",
+          body: "sent by tonxapi.com",
         })],
       });
       console.log("Transfer:", transfer);
 
       const result = await contract.send(transfer);
-      console.log("Result:", result);
+      setDestination("Sending 0.1 TON");
     } catch (error) {
       console.error("Error Sending TON:", error);
       setDestination("Error Sending TON");
