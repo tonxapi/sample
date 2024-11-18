@@ -2,7 +2,7 @@
 
 1. 安裝依賴：
 ```bash
-npm install @tonx/core
+pnpm install
 ```
 
 2. 在 `App.tsx` 中設定您的 API 金鑰：
@@ -13,7 +13,12 @@ const client = new TONXJsonRpcProvider({
 });
 ```
 
-3. 設定要查詢的 USDT 地址：
+3. 設定要查詢的錢包地址：
 ```typescript
 const myUsdtAddress = "UQBm2-oK4u9CP56wS4LaPUWV-meDmNnSaD9Jlt-FyRHoBimJ";  // 替換為要查詢的地址
+```
+
+4. 執行程式
+```bash
+pnpm dev
 ```
