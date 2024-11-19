@@ -13,9 +13,9 @@ const client = new TONXJsonRpcProvider({
 });
 ```
 
-3. 設定要查詢的錢包地址：
+3. 設定要查詢的 NFT 地址：
 ```typescript
-const myUsdtAddress = "UQBm2-oK4u9CP56wS4LaPUWV-meDmNnSaD9Jlt-FyRHoBimJ";  // 替換為要查詢的地址
+const nftAddress = "EQAc4jcphnAeLQ_wmS7e4leWghFysRI_VKUCR0jhiVDX9hXn";  // 替換為要查詢的地址
 ```
 
 4. 執行程式
