@@ -45,7 +45,7 @@ class USDTBalanceChecker {
 
 // 使用範例
 async function main() {
-    const checker = new USDTBalanceChecker("dbc048c1-381a-4caa-b513-fdf372e7e3d0");
+    const checker = new USDTBalanceChecker("YOUR_API_KEY");
     console.log("fetching...");
 
     const result = await checker.checkBalanceAndTransaction();
