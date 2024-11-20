@@ -63,7 +63,7 @@ func main() {
 			bytes.NewReader(reqBody),
 		)
 		if err != nil {
-			fmt.Println("[ERROR] Fail to call API \"getMasterchainInfo\" with error:", err.Error())
+			fmt.Printf("[ERROR] Fail to call API \"%s\" with error: %s\n", req.Method, err.Error())
 			return nil
 		}
 
