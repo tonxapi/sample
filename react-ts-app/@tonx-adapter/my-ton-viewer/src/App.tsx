@@ -13,7 +13,7 @@ export default function App() {
   const [accountBalance, setAccountBalance] = useState<string>("No connection");
   const [lastTransaction, setLastTransaction] = useState<Transaction | string>("No connection");
   const [isLoading, setIsLoading] = useState(false);
-  const myUsdtAddress = Address.parse("UQBm2-oK4u9CP56wS4LaPUWV-meDmNnSaD9Jlt-FyRHoBimJ");
+  const myUsdtAddress = Address.parse("UQBv3exBKLmQcn2Fm6VlntAInW-je1YP4U59gJxaO62NCyMn");
 
   // Step 1: init TONX client
   const client = new ToncoreAdapter({
@@ -27,9 +27,8 @@ export default function App() {
     try {
       // Step 2: Fetch the latest transfer-in
       const transactions = await client.getTransactions(myUsdtAddress, { limit: 1 });
-      console.log(myUsdtAddress);
 
-      setLastTransaction(transactions[0].hash.toString() || "No transaction found");
+      setLastTransaction({ transaction_hash: transactions[0].hash().toString("hex") || "No transaction found" });
 
       // Step 3: Fetch USDT balance
       const balance = await client.getBalance(myUsdtAddress);
@@ -49,7 +48,12 @@ export default function App() {
           <div className="steps">
             <div className="step">
               <div className="step-number">1</div>
-              <p>Get your API key on <a href="https://dashboard.tonxapi.com" target="_blank" rel="noopener noreferrer">dashboard.tonxapi.com</a></p>
+              <p>
+                Get your API key on{" "}
+                <a href="https://dashboard.tonxapi.com" target="_blank" rel="noopener noreferrer">
+                  dashboard.tonxapi.com
+                </a>
+              </p>
             </div>
             <div className="step">
               <div className="step-number">2</div>
@@ -77,7 +81,7 @@ export default function App() {
             <div className="transaction-container">
               {typeof lastTransaction === "object" && lastTransaction?.transaction_hash ? (
                 <a
-                  href={`https://tonviewer.com/${lastTransaction.transaction_hash}`}
+                  href={`https://tonviewer.com/transaction/${lastTransaction.transaction_hash}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -93,12 +97,8 @@ export default function App() {
         </div>
 
         <div className="text-center">
-          <button
-            onClick={handleConnectReload}
-            disabled={isLoading}
-            className={`button ${isLoading ? 'loading' : ''}`}
-          >
-            {isLoading ? 'Loading...' : 'Connect & Reload'}
+          <button onClick={handleConnectReload} disabled={isLoading} className={`button ${isLoading ? "loading" : ""}`}>
+            {isLoading ? "Loading..." : "Connect & Reload"}
           </button>
         </div>
       </header>
