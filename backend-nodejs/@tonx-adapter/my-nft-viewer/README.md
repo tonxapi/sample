@@ -1,0 +1,1 @@
+[Go to @tonx-core NFT Viewer](../../@tonx-core/my-nft-viewer)
