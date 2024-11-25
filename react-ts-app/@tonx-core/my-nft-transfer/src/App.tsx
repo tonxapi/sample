@@ -94,6 +94,8 @@ export default function App() {
       await provider.sendMessage(boc);
 
       const hash = externalMessageCell.hash().toString('hex');
+      console.log("message hash: " + hash);
+
       setStatus("Transfer successful!");
 
     } catch (error) {

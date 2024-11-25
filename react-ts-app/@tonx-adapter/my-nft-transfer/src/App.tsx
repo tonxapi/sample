@@ -98,6 +98,7 @@ export default function App() {
       await client.sendFile(signedTransaction);
 
       const hash = externalMessageCell.hash().toString('hex');
+      console.log("message hash: " + hash);
       setStatus("Transfer successful!");
     } catch (error) {
       console.error('Transfer failed:', error);

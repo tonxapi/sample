@@ -100,9 +100,10 @@ async function transferNFT(params: NFTTransferParams): Promise<TransferResult> {
         await provider.sendMessage(boc);
 
         const hash = externalMessageCell.hash().toString('hex');
-        console.log("Transfer successful!");
-        console.log("Transaction hash:", hash);
+        console.log("message hash:", hash);
 
+
+        console.log("Transfer successful!");
         return {
             success: true,
             hash

@@ -5,8 +5,6 @@ import {
     external,
     storeMessage,
     beginCell,
-    toNano,
-    WalletContractV3R2
 } from '@ton/ton';
 import { mnemonicToPrivateKey } from "@ton/crypto";
 import { ToncoreAdapter } from '@tonx/adapter'
@@ -33,7 +31,7 @@ async function transferTon({
     try {
         // Generate wallet from mnemonic
         const keypair = await mnemonicToPrivateKey(mnemonic);
-        const wallet = WalletContractV3R2.create({
+        const wallet = WalletContractV4.create({
             workchain: 0,
             publicKey: keypair.publicKey,
         });
@@ -43,6 +41,7 @@ async function transferTon({
 
         // Create transfer message
         const seqno = await contract.getSeqno();
+
         const transfer = await contract.createTransfer({
             seqno,
             secretKey: keypair.secretKey,
@@ -59,6 +58,8 @@ async function transferTon({
         // Send transaction
         const result = await contract.send(transfer);
         console.log("Transfer sent:", result);
+        const boc = beginCell().store(storeMessage(external({ to: contract.address, body: transfer }))).endCell();
+        console.log("message hash", boc.hash().toString("base64"));
         return "success";
 
     } catch (error) {
@@ -72,7 +73,7 @@ const exampleTransfer = async () => {
     const params: TonTransferParams = {
         recipientAddress: '', // Recipient address
         amount: '0.1', // Amount in TON
-        comment: 'Payment for services', // Optional comment
+        comment: 'Payment for TONX API', // Optional comment
         mnemonic: ["your", "mnemonics"]
     };
 

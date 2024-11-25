@@ -133,7 +133,8 @@ export default function App() {
 
       const signedTransaction = externalMessageCell.toBoc();
       await client.sendFile(signedTransaction);
-
+      const hash = externalMessageCell.hash().toString('hex');
+      console.log('message hash:', hash);
       setStatus("Transfer successful!");
 
     } catch (error) {

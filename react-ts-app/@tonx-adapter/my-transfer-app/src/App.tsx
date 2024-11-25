@@ -1,7 +1,13 @@
 "use client";
 import { useState } from "react";
 import "./App.css";
-import { WalletContractV4, internal } from "@ton/ton";
+import {
+  beginCell,
+  WalletContractV4,
+  internal,
+  external,
+  storeMessage,
+} from '@ton/ton';
 import { ToncoreAdapter } from "@tonx/adapter";
 import { mnemonicToPrivateKey } from "@ton/crypto";
 
@@ -39,8 +45,11 @@ export default function App() {
   const [destination, setDestination] = useState<string>("Dest. Address");
 
   // Initialize TONX client
-  // Implement the "client" function
-  
+  const client = new ToncoreAdapter({
+    network: "testnet", // testnet or mainnet
+    apiKey: "YOUR_API_KEY",
+  });
+
   const handleConnectReload = async () => {
     try {
       // Generate wallet contract
@@ -63,8 +72,13 @@ export default function App() {
           body: "sent by tonxapi.com",
         })],
       });
-      
+      console.log("Transfer:", transfer);
+
       const result = await contract.send(transfer);
+
+      const hash = beginCell().store(storeMessage(external({ to: contract.address, body: transfer }))).endCell();
+      console.log('message hash:', hash);
+
       setDestination("Sending 0.1 TON");
     } catch (error) {
       console.error("Error Sending TON:", error);
