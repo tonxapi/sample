@@ -128,7 +128,7 @@ async function transferJettons({
     await client.sendFile(signedTransaction);
 
     const hash = externalMessageCell.hash().toString('hex');
-    console.log('Transaction hash:', hash);
+    console.log('message hash:', hash);
     return hash;
 }
 
