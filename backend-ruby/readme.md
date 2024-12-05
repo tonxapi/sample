@@ -16,7 +16,7 @@ pkg install libsodium
 ```
 
 # Installation
-Ensure your ruby version is `3.3.6` or later an initialize your application's Gemfile:
+Ensure your ruby version is `3.3.6` or later and initialize your application's Gemfile:
 
 execute the command in terminal:
 
