@@ -1,4 +1,5 @@
 # Overview
+This guide provides instructions on setting up and running the Ruby-based project for doing the simple transfer via TONX API including Jetton and Ton 
 
 # Startup
 For using the RbNaCl to do the signature , it sould install libsodium pre implementation.
@@ -24,7 +25,7 @@ bundle install
 ```
 
 # Execution
-Under the root folder `backend-ruby` and follow the command line
+Navigate to the project's root folder `backend-ruby` and use the following command lines based on your desired functionality:
 
 ## Ton simple transfer
 ```
