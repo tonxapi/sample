@@ -31,7 +31,7 @@ async function transferTON(params: TONTransferParams): Promise<TransferResult> {
     } = params;
 
     const provider = new TONXJsonRpcProvider({
-        network: 'testnet', // network: "testnet" // testnet or mainnet
+        network: 'testnet', // testnet or mainnet
         apiKey: process.env.TONX_API_KEY as string
     });
 

@@ -46,7 +46,7 @@ export default function App() {
 
   // Initialize TONX client
   const client = new ToncoreAdapter({
-    network: "testnet", // network: "testnet" // testnet or mainnet
+    network: "testnet", // testnet or mainnet
     apiKey: import.meta.env.VITE_TONXAPI_KEY,
   });
 

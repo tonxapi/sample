@@ -22,7 +22,7 @@ export default function App() {
   // Constants
   const MNEMONIC = ['your', "mnemonic"]
   const provider = new TONXJsonRpcProvider({
-    network: 'testnet', // network: "testnet" // testnet or mainnet
+    network: 'testnet', // testnet or mainnet
     apiKey: import.meta.env.VITE_TONXAPI_KEY,
   });
 
