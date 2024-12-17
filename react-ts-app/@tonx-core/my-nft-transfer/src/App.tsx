@@ -126,39 +126,39 @@ export default function App() {
             </div>
           </div>
         </div>
-
-        <div className="card">
-          <h2>Transfer NFT</h2>
-          <div className="input-container">
-            <input
-              type="text"
-              placeholder="NFT Contract Address"
-              value={nftAddress}
-              onChange={(e) => setNftAddress(e.target.value)}
-              disabled={isLoading}
-            />
-            <input
-              type="text"
-              placeholder="Recipient Address"
-              value={recipientAddress}
-              onChange={(e) => setRecipientAddress(e.target.value)}
-              disabled={isLoading}
-            />
-            <button
-              onClick={handleTransfer}
-              disabled={isLoading || !nftAddress || !recipientAddress}
-              className={`button ${isLoading ? "loading" : ""}`}
-            >
-              {isLoading ? "Processing..." : "Transfer NFT"}
-            </button>
-          </div>
-          {status && (
-            <div className="transaction-container">
-              <p>{status}</p>
-            </div>
-          )}
-        </div>
       </header>
+
+      <div className="card">
+        <h2>Transfer NFT</h2>
+        <div className="input-container">
+          <input
+            type="text"
+            placeholder="NFT Contract Address"
+            value={nftAddress}
+            onChange={(e) => setNftAddress(e.target.value)}
+            disabled={isLoading}
+          />
+          <input
+            type="text"
+            placeholder="Recipient Address"
+            value={recipientAddress}
+            onChange={(e) => setRecipientAddress(e.target.value)}
+            disabled={isLoading}
+          />
+          <button
+            onClick={handleTransfer}
+            disabled={isLoading || !nftAddress || !recipientAddress}
+            className={`button ${isLoading ? "loading" : ""}`}
+          >
+            {isLoading ? "Processing..." : "Transfer NFT"}
+          </button>
+        </div>
+        {status && (
+          <div className="transaction-container">
+            <p>{status}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

@@ -65,46 +65,47 @@ export default function App() {
             </div>
           </div>
         </div>
-        <h1>Get My TON Transactions</h1>
-
-        <div className="card">
-          <div className="mb-2">
-            <h2>Balance</h2>
-            <div className="transaction-container">
-              <span className="transaction-hash">{accountBalance}</span>
-            </div>
-          </div>
-
-          <div>
-            <h2>Last Transaction</h2>
-            <div className="transaction-container">
-              {typeof lastTransaction === "object" && lastTransaction?.hash ? (
-                <a
-                  href={`https://tonviewer.com/${lastTransaction.hash}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {lastTransaction.hash}
-                </a>
-              ) : (
-                <span className="transaction-hash">
-                  {typeof lastTransaction === "string" ? lastTransaction : "No transaction found"}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="text-center">
-          <button
-            onClick={handleConnectReload}
-            disabled={isLoading}
-            className={`button ${isLoading ? 'loading' : ''}`}
-          >
-            {isLoading ? 'Loading...' : 'Connect & Reload'}
-          </button>
-        </div>
       </header>
+
+      <h1>Get My TON Transactions</h1>
+
+      <div className="card">
+        <div className="mb-2">
+          <h2>Balance</h2>
+          <div className="transaction-container">
+            <span className="transaction-hash">{accountBalance}</span>
+          </div>
+        </div>
+
+        <div>
+          <h2>Last Transaction</h2>
+          <div className="transaction-container">
+            {typeof lastTransaction === "object" && lastTransaction?.hash ? (
+              <a
+                href={`https://tonviewer.com/${lastTransaction.hash}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {lastTransaction.hash}
+              </a>
+            ) : (
+              <span className="transaction-hash">
+                {typeof lastTransaction === "string" ? lastTransaction : "No transaction found"}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="text-center">
+        <button
+          onClick={handleConnectReload}
+          disabled={isLoading}
+          className={`button ${isLoading ? 'loading' : ''}`}
+        >
+          {isLoading ? 'Loading...' : 'Connect & Reload'}
+        </button>
+      </div>
     </div>
   );
 }
