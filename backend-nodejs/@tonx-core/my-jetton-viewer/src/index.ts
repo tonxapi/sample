@@ -6,7 +6,7 @@ class USDTBalanceChecker {
 
     constructor(apiKey: string) {
         this.client = new TONXJsonRpcProvider({
-            network: "mainnet",
+            network: "testnet", // testnet or mainnet
             apiKey: apiKey,
         });
     }
@@ -43,9 +43,9 @@ class USDTBalanceChecker {
     }
 }
 
-// 使用範例
+// Example usage
 async function main() {
-    const checker = new USDTBalanceChecker("YOUR_API_KEY");
+    const checker = new USDTBalanceChecker(process.env.TONX_API_KEY as string);
     console.log("fetching...");
 
     const result = await checker.checkBalanceAndTransaction();

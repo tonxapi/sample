@@ -2,7 +2,7 @@ import { TONXJsonRpcProvider } from '@tonx/core';
 import { mnemonicToPrivateKey } from "@ton/crypto";
 import {
     Address,
-    WalletContractV4,
+    WalletContractV4, // change to your wallet version
     internal,
     external,
     beginCell,
@@ -32,8 +32,8 @@ async function transferJettons(params: JettonTransferParams): Promise<TransferRe
     } = params;
 
     const provider = new TONXJsonRpcProvider({
-        network: 'testnet',
-        apiKey: 'YOUR_API_KEY',
+        network: 'testnet', // testnet or mainnet
+        apiKey: process.env.TONX_API_KEY as string
     });
 
     console.log("Starting jetton transfer...");
@@ -138,7 +138,6 @@ async function main() {
         amount: 10, // amount of jettons to transfer
         recipientAddress: '', // recipient TON address
         jettonWalletAddress: '', // your jetton wallet address
-
     };
 
     try {

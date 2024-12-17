@@ -4,7 +4,7 @@ import { TONXJsonRpcProvider } from '@tonx/core';
 import { mnemonicToPrivateKey } from "@ton/crypto";
 import {
   Address,
-  WalletContractV4,
+  WalletContractV4, // change to your wallet version
   internal,
   external,
   beginCell,
@@ -21,8 +21,8 @@ export default function App() {
   // Constants
   const MNEMONIC = ["your", "mnemonics"]
   const provider = new TONXJsonRpcProvider({
-    network: 'testnet',
-    apiKey: 'YOUR_API_KEY',
+    network: 'testnet', // network: "testnet" // testnet or mainnet
+    apiKey: import.meta.env.VITE_TONXAPI_KEY,
   });
 
   const handleTransfer = async () => {

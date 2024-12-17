@@ -11,7 +11,7 @@ class TONAccountChecker {
 
     constructor(apiKey: string) {
         this.client = new TONXJsonRpcProvider({
-            network: "mainnet",
+            network: "testnet ", // testnet or mainnet
             apiKey,
         });
     }
@@ -40,7 +40,7 @@ class TONAccountChecker {
 }
 
 async function main() {
-    const checker = new TONAccountChecker("YOUR_API_KEY");
+    const checker = new TONAccountChecker(process.env.TONX_API_KEY as string);
     console.log("Checking account...");
 
     const result = await checker.checkBalanceAndTransaction();

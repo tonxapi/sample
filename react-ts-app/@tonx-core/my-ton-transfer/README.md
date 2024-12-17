@@ -5,15 +5,16 @@
 pnpm install
 ```
 
-2. 在 `App.tsx` 中設定您的 API 金鑰：
+2. 在 `.env` 中設定您的 API 金鑰：
 ```typescript
-const client = new TONXJsonRpcProvider({
-  network: "mainnet",
-  apiKey: "YOUR API KEY"  // 替換為您的 API 金鑰
-});
+VITE_TONXAPI_KEY=YOUR_API_KEY
 ```
+3. 在App.tsx中設定您的錢包私鑰：
+```typescript
+const MNEMONIC = ["your", "mnemonics"]
+```typescript
 
-3. 設定要查詢的錢包地址：
+４. Need to specify the version (v4) of the wallet used in the code：
 ```typescript
 const myTonAddress = "EQDi1eWU3HWWst8owY8OMq2Dz9nJJEHUROza8R-_wEGb8yu6";  // 替換為要查詢的地址
 ```

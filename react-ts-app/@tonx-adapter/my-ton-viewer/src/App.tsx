@@ -17,8 +17,8 @@ export default function App() {
 
   // Step 1: init TONX client
   const client = new ToncoreAdapter({
-    network: "mainnet",
-    apiKey: "YOUR_API_KEY",
+    network: "testnet ", // testnet or mainnet
+    apiKey: import.meta.env.VITE_TONXAPI_KEY,
   });
 
   const handleConnectReload = async () => {

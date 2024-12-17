@@ -3,7 +3,7 @@ import "./App.css";
 import {
   beginCell,
   Address,
-  WalletContractV4,
+  WalletContractV4, // change to your wallet version
   internal,
   external,
   storeMessage,
@@ -41,7 +41,7 @@ export default function App() {
   const mnemonic = ["your", 'mnemonic']
   const client = new ToncoreAdapter({
     network: "testnet",
-    apiKey: "YOUR_API_KEY",
+    apiKey: import.meta.env.VITE_TONXAPI_KEY,
   });
 
   const handleTransfer = async () => {

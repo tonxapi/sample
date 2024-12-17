@@ -3,7 +3,7 @@ import { useState } from "react";
 import "./App.css";
 import {
   beginCell,
-  WalletContractV4,
+  WalletContractV4, // change to your wallet version
   internal,
   external,
   storeMessage,
@@ -46,8 +46,8 @@ export default function App() {
 
   // Initialize TONX client
   const client = new ToncoreAdapter({
-    network: "testnet", // testnet or mainnet
-    apiKey: "YOUR_API_KEY",
+    network: "testnet", // network: "testnet" // testnet or mainnet
+    apiKey: import.meta.env.VITE_TONXAPI_KEY,
   });
 
   const handleConnectReload = async () => {

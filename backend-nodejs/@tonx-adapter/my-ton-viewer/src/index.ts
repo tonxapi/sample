@@ -19,7 +19,7 @@ class TONChecker {
     constructor(apiKey: string, address: string) {
         this.walletAddress = Address.parse(address);
         this.client = new ToncoreAdapter({
-            network: "mainnet",
+            network: "testnet", // testnet or mainnet
             apiKey: apiKey
         });
     }
@@ -68,7 +68,7 @@ class TONChecker {
 // Usage example
 async function main() {
     const walletAddress = "EQBi5X1kwa27gqKn2MztaEZz7Zkhvb_WlSif-CnIiUjwuLEG"; // Example address
-    const checker = new TONChecker("dbc048c1-381a-4caa-b513-fdf372e7e3d0", walletAddress);
+    const checker = new TONChecker(process.env.TONX_API_KEY as string, walletAddress);
 
     console.log("Checking TON account...");
 

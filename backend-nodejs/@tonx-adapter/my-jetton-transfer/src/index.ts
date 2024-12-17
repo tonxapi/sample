@@ -2,7 +2,7 @@ import {
     beginCell,
     Address,
     TonClient,
-    WalletContractV4,
+    WalletContractV4, // change to your wallet version
     internal,
     external,
     storeMessage,
@@ -43,8 +43,8 @@ async function transferJettons({
     mnemonic
 }: JettonTransferParams): Promise<string> {
     const client = new ToncoreAdapter({
-        network: 'testnet',
-        apiKey: "YOUR_API_KEY",
+        network: 'testnet', // testnet or mainnet
+        apiKey: process.env.TONX_API_KEY as string,
     });
 
     // Get keypair from mnemonic
