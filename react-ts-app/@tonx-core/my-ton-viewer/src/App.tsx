@@ -12,11 +12,12 @@ export default function App() {
   const [accountBalance, setAccountBalance] = useState<string>("No connection");
   const [lastTransaction, setLastTransaction] = useState<Transaction | string>("No connection");
   const [isLoading, setIsLoading] = useState(false);
-  const myTonAddress = "EQDi1eWU3HWWst8owY8OMq2Dz9nJJEHUROza8R-_wEGb8yu6";
-
+  const myTonAddress = "0QDrAsR8jmvPnRJGcRN0kHfqfLxUs0y6PCpcftyhTVm6vOqC";
+  const network = "testnet";  // testnet or mainnet
+  const domain = network === "testnet" ? "testnet.tonviewer.com" : "tonviewer.com";
   // Step 1: init TONX client
   const client = new TONXJsonRpcProvider({
-    network: "testnet ", // testnet or mainnet
+    network: network,
     apiKey: import.meta.env.VITE_TONXAPI_KEY,
   });
 
@@ -25,7 +26,7 @@ export default function App() {
     try {
       // Step 2: Fetch account balance
       const balance = await client.getAccountBalance(myTonAddress);
-      setAccountBalance(balance);
+      setAccountBalance((balance / 1000000000).toString());
 
       // Step 3: Fetch the latest transaction
       const transactions = await client.getTransactions({ account: myTonAddress });
@@ -82,7 +83,7 @@ export default function App() {
           <div className="transaction-container">
             {typeof lastTransaction === "object" && lastTransaction?.hash ? (
               <a
-                href={`https://tonviewer.com/${lastTransaction.hash}`}
+                href={`https://${domain}/transaction/${encodeURIComponent(lastTransaction.hash)}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >

@@ -7,7 +7,7 @@ class TONNftChecker {
     constructor(apiKey: string) {
         this.nftAddress = "EQAc4jcphnAeLQ_wmS7e4leWghFysRI_VKUCR0jhiVDX9hXn";
         this.client = new TONXJsonRpcProvider({
-            network: "testnet ", // testnet or mainnet
+            network: "testnet", // testnet or mainnet
             apiKey: apiKey
         });
     }

@@ -16,7 +16,7 @@ export default function App() {
 
   // Step 1: init TONX client
   const client = new TONXJsonRpcProvider({
-    network: "testnet ", // testnet or mainnet
+    network: "testnet", // testnet or mainnet
     apiKey: "YOUR API KEY",
   });
 
@@ -29,7 +29,7 @@ export default function App() {
 
       // Step 3: Fetch USDT balance
       const balance = await client.getTokenData(transactions[0].source_wallet);
-      setAccountBalance(balance.balance);
+      setAccountBalance(balance.balance / 1000000);
     } catch (error) {
       setAccountBalance("Error fetching balance");
       setLastTransaction("Error fetching transaction");
@@ -58,11 +58,11 @@ export default function App() {
           </div>
         </div>
 
-        <h1>Get My USDT Lastest transfer-in</h1>
+        <h1>Get My Jetton Lastest transfer-in</h1>
 
         <div className="card">
           <div className="mb-2">
-            <h2>USDT Balance</h2>
+            <h2>Jetton Balance</h2>
             <div className="transaction-container">
               <span className="transaction-hash">{accountBalance}</span>
             </div>

@@ -15,7 +15,7 @@ export default function App() {
 
   // Step 1: init TONX client
   const client = new TONXJsonRpcProvider({
-    network: "testnet ", // testnet or mainnet
+    network: "testnet", // testnet or mainnet
     apiKey: import.meta.env.VITE_TONXAPI_KEY,
   });
 

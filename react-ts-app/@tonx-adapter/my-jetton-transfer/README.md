@@ -8,7 +8,7 @@ pnpm install
 2. 在 `App.tsx` 中設定您的 API 金鑰：
 ```typescript
 const client = new TONXJsonRpcProvider({
-  network: "testnet ", // testnet or mainnet
+  network: "testnet", // testnet or mainnet
   apiKey: "YOUR API KEY"  // 替換為您的 API 金鑰
 });
 ```

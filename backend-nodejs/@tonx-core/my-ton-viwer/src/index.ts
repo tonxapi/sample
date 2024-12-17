@@ -11,7 +11,7 @@ class TONAccountChecker {
 
     constructor(apiKey: string) {
         this.client = new TONXJsonRpcProvider({
-            network: "testnet ", // testnet or mainnet
+            network: "testnet", // testnet or mainnet
             apiKey,
         });
     }
