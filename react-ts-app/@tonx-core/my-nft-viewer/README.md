@@ -78,7 +78,7 @@ cp .env.example .env
 pnpm dev
 ```
 
-3. Open your browser and navigate to the local development server (usually `http://localhost:5173`)
+3. Open your browser and navigate to the local development server (usually `http://localhost:4000`)
 
 ## Features
 

@@ -68,7 +68,7 @@ Start the development server:
 pnpm dev
 ```
 
-Access the application (usually at `http://localhost:5173`)
+Access the application (usually at `http://localhost:4000`)
 
 ## Component Functionality
 
