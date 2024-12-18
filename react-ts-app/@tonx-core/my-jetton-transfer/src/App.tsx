@@ -1,17 +1,16 @@
 import { useState } from "react";
 import "./App.css";
-import { TONXJsonRpcProvider } from '@tonx/core';
+import { TONXJsonRpcProvider } from "@tonx/core";
 import { mnemonicToPrivateKey } from "@ton/crypto";
 import {
   Address,
-  WalletContractV4,
+  WalletContractV4, // change to your wallet version
   internal,
   external,
   beginCell,
   storeMessage,
   toNano,
-  WalletContractV3R2,
-} from '@ton/ton';
+} from "@ton/ton";
 
 export default function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,10 +19,10 @@ export default function App() {
   const [jettonWalletAddress, setJettonWalletAddress] = useState("");
   const [status, setStatus] = useState("");
 
-  const MNEMONIC = ['your', 'mnemonic'];
+  const MNEMONIC = ["your", "mnemonic"];
   const provider = new TONXJsonRpcProvider({
-    network: 'testnet',
-    apiKey: 'YOUR_API_KEY',
+    network: "testnet", // testnet or mainnet
+    apiKey: import.meta.env.VITE_TONXAPI_KEY,
   });
 
   const handleTransfer = async () => {
@@ -32,9 +31,9 @@ export default function App() {
 
     try {
       const keyPair = await mnemonicToPrivateKey(MNEMONIC);
-      const wallet = WalletContractV3R2.create({
+      const wallet = WalletContractV4.create({
         workchain: 0,
-        publicKey: Buffer.from(keyPair.publicKey)
+        publicKey: Buffer.from(keyPair.publicKey),
       });
 
       const walletAddress = wallet.address.toString({
@@ -45,25 +44,24 @@ export default function App() {
       setStatus("Checking wallet deployment...");
       const { init } = wallet;
       const contractDeployed = await provider.getAddressState(walletAddress);
-      const neededInit = (!contractDeployed && init) ? init : null;
+      const neededInit = !contractDeployed && init ? init : null;
 
       if (!contractDeployed) {
         throw new Error("Wallet not deployed");
       }
 
-      const seqno = await provider.runGetMethod({
-        address: walletAddress,
-        method: 'seqno',
-        stack: []
-      }).then(res => parseInt(res.stack[0][1], 16));
+      const seqno = await provider
+        .runGetMethod({
+          address: walletAddress,
+          method: "seqno",
+          stack: [],
+        })
+        .then((res) => parseInt(res.stack[0][1], 16));
 
       setStatus("Creating jetton transfer message...");
 
       // Create comment payload
-      const forwardPayload = beginCell()
-        .storeUint(0, 32)
-        .storeStringTail('')
-        .endCell();
+      const forwardPayload = beginCell().storeUint(0, 32).storeStringTail("").endCell();
 
       // Create transfer message body
       const messageBody = beginCell()
@@ -81,7 +79,7 @@ export default function App() {
       // Create internal message
       const internalMessage = internal({
         to: Address.parse(jettonWalletAddress),
-        value: toNano('0.05'),
+        value: toNano("0.05"),
         bounce: true,
         body: messageBody,
       });
@@ -97,21 +95,18 @@ export default function App() {
       });
 
       setStatus("Sending transaction...");
-      const externalMessageCell = beginCell()
-        .store(storeMessage(externalMessage))
-        .endCell();
+      const externalMessageCell = beginCell().store(storeMessage(externalMessage)).endCell();
 
-      const boc = externalMessageCell.toBoc().toString('base64');
+      const boc = externalMessageCell.toBoc().toString("base64");
       await provider.sendMessage(boc);
 
-      const hash = externalMessageCell.hash().toString('hex');
+      const hash = externalMessageCell.hash().toString("hex");
       console.log("message hash: " + hash);
 
       setStatus("Transfer successful!");
-
     } catch (error) {
-      console.error('Transfer failed:', error);
-      setStatus(`Transfer failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Transfer failed:", error);
+      setStatus(`Transfer failed: ${error instanceof Error ? error.message : "Unknown error"}`);
     } finally {
       setIsLoading(false);
     }
@@ -120,12 +115,17 @@ export default function App() {
   return (
     <div className="container">
       <header className="header">
-        <h1>3 Steps to TON Transfer</h1>
+        <h1>3 Steps to TON</h1>
         <div className="card">
           <div className="steps">
             <div className="step">
               <div className="step-number">1</div>
-              <p>Get your API key from <a href="https://dashboard.tonxapi.com" target="_blank" rel="noopener noreferrer">dashboard.tonxapi.com</a></p>
+              <p>
+                Get your API key from{" "}
+                <a href="https://dashboard.tonxapi.com" target="_blank" rel="noopener noreferrer">
+                  dashboard.tonxapi.com
+                </a>
+              </p>
             </div>
             <div className="step">
               <div className="step-number">2</div>

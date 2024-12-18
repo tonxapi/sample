@@ -1,12 +1,12 @@
 import { TONXJsonRpcProvider } from "@tonx/core";
 
-class USDTBalanceChecker {
+class JettonBalanceChecker {
     private client: TONXJsonRpcProvider;
-    private myUsdtAddress: string = "UQBm2-oK4u9CP56wS4LaPUWV-meDmNnSaD9Jlt-FyRHoBimJ";
+    private myJettonAddress: string = "UQBm2-oK4u9CP56wS4LaPUWV-meDmNnSaD9Jlt-FyRHoBimJ";
 
     constructor(apiKey: string) {
         this.client = new TONXJsonRpcProvider({
-            network: "mainnet",
+            network: "testnet", // testnet or mainnet
             apiKey: apiKey,
         });
     }
@@ -17,7 +17,7 @@ class USDTBalanceChecker {
     }> {
         try {
             const transactions = await this.client.getJettonTransfers({
-                address: this.myUsdtAddress,
+                address: this.myJettonAddress,
                 direction: "in"
             });
 
@@ -43,9 +43,9 @@ class USDTBalanceChecker {
     }
 }
 
-// 使用範例
+// Example usage
 async function main() {
-    const checker = new USDTBalanceChecker("YOUR_API_KEY");
+    const checker = new JettonBalanceChecker(process.env.TONX_API_KEY as string);
     console.log("fetching...");
 
     const result = await checker.checkBalanceAndTransaction();

@@ -4,7 +4,7 @@ import { TONXJsonRpcProvider } from '@tonx/core';
 import { mnemonicToPrivateKey } from "@ton/crypto";
 import {
   Address,
-  WalletContractV4,
+  WalletContractV4, // change to your wallet version
   internal,
   external,
   beginCell,
@@ -22,8 +22,8 @@ export default function App() {
   // Constants
   const MNEMONIC = ['your', "mnemonic"]
   const provider = new TONXJsonRpcProvider({
-    network: 'testnet',
-    apiKey: 'YOUR_API_KEY',
+    network: 'testnet', // testnet or mainnet
+    apiKey: import.meta.env.VITE_TONXAPI_KEY,
   });
 
   const handleTransfer = async () => {
@@ -109,7 +109,7 @@ export default function App() {
   return (
     <div className="container">
       <header className="header">
-        <h1>3 Steps to TON Transfer</h1>
+        <h1>3 Steps to TON</h1>
         <div className="card">
           <div className="steps">
             <div className="step">
@@ -126,39 +126,39 @@ export default function App() {
             </div>
           </div>
         </div>
-
-        <div className="card">
-          <h2>Transfer NFT</h2>
-          <div className="input-container">
-            <input
-              type="text"
-              placeholder="NFT Contract Address"
-              value={nftAddress}
-              onChange={(e) => setNftAddress(e.target.value)}
-              disabled={isLoading}
-            />
-            <input
-              type="text"
-              placeholder="Recipient Address"
-              value={recipientAddress}
-              onChange={(e) => setRecipientAddress(e.target.value)}
-              disabled={isLoading}
-            />
-            <button
-              onClick={handleTransfer}
-              disabled={isLoading || !nftAddress || !recipientAddress}
-              className={`button ${isLoading ? "loading" : ""}`}
-            >
-              {isLoading ? "Processing..." : "Transfer NFT"}
-            </button>
-          </div>
-          {status && (
-            <div className="transaction-container">
-              <p>{status}</p>
-            </div>
-          )}
-        </div>
       </header>
+
+      <div className="card">
+        <h2>Transfer NFT</h2>
+        <div className="input-container">
+          <input
+            type="text"
+            placeholder="NFT Contract Address"
+            value={nftAddress}
+            onChange={(e) => setNftAddress(e.target.value)}
+            disabled={isLoading}
+          />
+          <input
+            type="text"
+            placeholder="Recipient Address"
+            value={recipientAddress}
+            onChange={(e) => setRecipientAddress(e.target.value)}
+            disabled={isLoading}
+          />
+          <button
+            onClick={handleTransfer}
+            disabled={isLoading || !nftAddress || !recipientAddress}
+            className={`button ${isLoading ? "loading" : ""}`}
+          >
+            {isLoading ? "Processing..." : "Transfer NFT"}
+          </button>
+        </div>
+        {status && (
+          <div className="transaction-container">
+            <p>{status}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

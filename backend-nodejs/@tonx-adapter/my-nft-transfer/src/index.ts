@@ -1,7 +1,7 @@
 import {
     beginCell,
     Address,
-    WalletContractV4,
+    WalletContractV4, // change to your wallet version
     internal,
     external,
     storeMessage,
@@ -22,8 +22,8 @@ async function transferNFT({
     mnemonic
 }: NFTTransferParams): Promise<string> {
     const client = new ToncoreAdapter({
-        network: 'testnet',
-        apiKey: "YOUR_API_KEY",
+        network: 'testnet', // testnet or mainnet
+        apiKey: process.env.TONX_API_KEY as string,
     });
 
     // Get keypair from mnemonic
@@ -50,9 +50,9 @@ async function transferNFT({
         ? await client.runMethod(Address.parse(walletAddress), 'seqno').then(res => res.stack.readNumber())
         : 0;
 
-    // Create NFT transfer message body according to TEP-62
+    // Create NFT transfer message body
     const messageBody = beginCell()
-        .storeUint(0x5fcc3d14, 32)  // transfer OP code (TEP-62)
+        .storeUint(0x5fcc3d14, 32)
         .storeUint(Date.now(), 64)   // query_id
         .storeAddress(Address.parse(recipientAddress))  // new_owner
         .storeAddress(Address.parse(walletAddress))     // response_destination

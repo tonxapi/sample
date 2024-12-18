@@ -12,24 +12,24 @@ export default function App() {
   const [accountBalance, setAccountBalance] = useState<string>("No connection");
   const [lastTransaction, setLastTransaction] = useState<Transaction | string>("No connection");
   const [isLoading, setIsLoading] = useState(false);
-  const myUsdtAddress = "UQBm2-oK4u9CP56wS4LaPUWV-meDmNnSaD9Jlt-FyRHoBimJ";
+  const myJettonAddress = "UQBm2-oK4u9CP56wS4LaPUWV-meDmNnSaD9Jlt-FyRHoBimJ";
 
   // Step 1: init TONX client
   const client = new TONXJsonRpcProvider({
-    network: "mainnet",
-    apiKey: "YOUR API KEY",
+    network: "testnet", // testnet or mainnet
+    apiKey: import.meta.env.VITE_TONXAPI_KEY,
   });
 
   const handleConnectReload = async () => {
     setIsLoading(true);
     try {
       // Step 2: Fetch the latest transfer-in
-      const transactions = await client.getJettonTransfers({ address: myUsdtAddress, direction: "in" });
+      const transactions = await client.getJettonTransfers({ address: myJettonAddress, direction: "in" });
       setLastTransaction(transactions[0].transaction_hash || "No transaction found");
 
-      // Step 3: Fetch USDT balance
+      // Step 3: Fetch Jetton balance
       const balance = await client.getTokenData(transactions[0].source_wallet);
-      setAccountBalance(balance.balance);
+      setAccountBalance(balance.balance / 1000000);
     } catch (error) {
       setAccountBalance("Error fetching balance");
       setLastTransaction("Error fetching transaction");
@@ -45,7 +45,12 @@ export default function App() {
           <div className="steps">
             <div className="step">
               <div className="step-number">1</div>
-              <p>Get your API key on <a href="https://dashboard.tonxapi.com" target="_blank" rel="noopener noreferrer">dashboard.tonxapi.com</a></p>
+              <p>
+                Get your API key on{" "}
+                <a href="https://dashboard.tonxapi.com" target="_blank" rel="noopener noreferrer">
+                  dashboard.tonxapi.com
+                </a>
+              </p>
             </div>
             <div className="step">
               <div className="step-number">2</div>
@@ -58,11 +63,11 @@ export default function App() {
           </div>
         </div>
 
-        <h1>Get My USDT Lastest transfer-in</h1>
+        <h1>Get My Jetton Lastest transfer-in</h1>
 
         <div className="card">
           <div className="mb-2">
-            <h2>USDT Balance</h2>
+            <h2>Jetton Balance</h2>
             <div className="transaction-container">
               <span className="transaction-hash">{accountBalance}</span>
             </div>
@@ -89,12 +94,8 @@ export default function App() {
         </div>
 
         <div className="text-center">
-          <button
-            onClick={handleConnectReload}
-            disabled={isLoading}
-            className={`button ${isLoading ? 'loading' : ''}`}
-          >
-            {isLoading ? 'Loading...' : 'Connect & Reload'}
+          <button onClick={handleConnectReload} disabled={isLoading} className={`button ${isLoading ? "loading" : ""}`}>
+            {isLoading ? "Loading..." : "Connect & Reload"}
           </button>
         </div>
       </header>

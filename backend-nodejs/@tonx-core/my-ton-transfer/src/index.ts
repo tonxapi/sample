@@ -2,7 +2,7 @@ import { TONXJsonRpcProvider } from '@tonx/core';
 import { mnemonicToPrivateKey } from "@ton/crypto";
 import {
     Address,
-    WalletContractV4,
+    WalletContractV4, // change to your wallet version
     internal,
     external,
     beginCell,
@@ -31,8 +31,8 @@ async function transferTON(params: TONTransferParams): Promise<TransferResult> {
     } = params;
 
     const provider = new TONXJsonRpcProvider({
-        network: 'testnet',
-        apiKey: 'YOUR_API_KEY'
+        network: 'testnet', // testnet or mainnet
+        apiKey: process.env.TONX_API_KEY as string
     });
 
     console.log("Starting transfer...");
@@ -52,7 +52,7 @@ async function transferTON(params: TONTransferParams): Promise<TransferResult> {
         console.log("Checking wallet deployment...");
         const { init } = wallet;
         const contractDeployed = await provider.getAddressState(walletAddress);
-        const neededInit = (!contractDeployed && init) ? init : null;
+        const neededInit = contractDeployed === "uninitialized" && init ? init : null;
 
         if (!contractDeployed) {
             throw new Error("Wallet not deployed");
@@ -77,7 +77,7 @@ async function transferTON(params: TONTransferParams): Promise<TransferResult> {
             to: walletAddress,
             init: neededInit,
             body: wallet.createTransfer({
-                seqno,
+                seqno: neededInit ? 0 : seqno,
                 secretKey: keyPair.secretKey,
                 messages: [internalMessage],
             }),

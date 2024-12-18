@@ -1,6 +1,6 @@
 import {
     Address,
-    WalletContractV4,
+    WalletContractV4, // change to your wallet version
     internal,
     external,
     storeMessage,
@@ -24,8 +24,8 @@ async function transferTon({
 }: TonTransferParams): Promise<string> {
     // Initialize client
     const client = new ToncoreAdapter({
-        network: "testnet",
-        apiKey: "YOUR_API_KEY",
+        network: 'testnet', // testnet or mainnet
+        apiKey: process.env.TONX_API_KEY as string,
     });
 
     try {
