@@ -48,17 +48,6 @@ To track a different wallet:
 1. Get your API key from [dashboard.tonxapi.com](https://dashboard.tonxapi.com)
 2. **Important**: Use a testnet API key
 
-## TypeScript Interfaces
-
-The application uses TypeScript for type safety:
-
-```typescript
-interface Transaction {
-  hash?: string;
-  [key: string]: any;
-}
-```
-
 ## Features
 
 - View wallet balance in TON
