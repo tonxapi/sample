@@ -137,7 +137,7 @@ const exampleTransfer = async () => {
     const params: JettonTransferParams = {
         recipientAddress: '', // recipientAddress
         amount: 1,
-        jettonMasterAddress: '', // USDT master address
+        jettonMasterAddress: '', // Jetton master address
         mnemonic: ['your', 'mnemonics']
     };
 

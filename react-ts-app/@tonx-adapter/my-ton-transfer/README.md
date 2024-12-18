@@ -1,6 +1,6 @@
-# TON Jetton Transfer Application
+# TON Simple Transfer Application
 
-A React application that enables Jetton transfers using the TONX SDK.
+A React application that enables simple TON transfers using the TONX Adapter.
 
 ## Prerequisites
 
@@ -24,10 +24,10 @@ pnpm install
 
 ### Network Configuration
 
-1. The application is configured for testnet use. Ensure correct network setting:
+The application uses ToncoreAdapter configured for testnet:
 ```typescript
-const provider = new TONXJsonRpcProvider({
-  network: "testnet", // Keep this as testnet for development
+const client = new ToncoreAdapter({
+  network: "testnet", // testnet or mainnet
   apiKey: import.meta.env.VITE_TONXAPI_KEY,
 });
 ```
@@ -38,22 +38,8 @@ This application uses WalletContractV4. You need to:
 
 1. Configure your mnemonic phrases:
 ```typescript
-const MNEMONIC = ['your', 'mnemonic'];  // Replace with your mnemonic phrases
+const mnemonic = ['your', 'mnemonic'];  // Replace with your mnemonic phrases
 ```
-
-2. **Important**: The wallet must be deployed before attempting transfers
-```typescript
-if (!contractDeployed) {
-  throw new Error("Wallet not deployed");
-}
-```
-
-### Required Addresses
-
-The application requires three inputs:
-1. Your Jetton Wallet Address
-2. Recipient's TON Address
-3. Amount of Jettons to transfer (will be multiplied by 10^6)
 
 ### API Key Setup
 
@@ -62,8 +48,9 @@ The application requires three inputs:
 
 ## Features
 
-- Transfer Jettons between addresses
+- Send fixed amount (0.1 TON) transfers
 - Support for WalletContractV4
+- Uses ToncoreAdapter for simplified contract interaction
 - Real-time transfer status updates
 - Error handling and validation
 - Loading state management
@@ -81,9 +68,9 @@ Access the application (usually at `http://localhost:4000`)
 
 ### Transfer Process
 1. Input validation
-2. Wallet deployment check
-3. Create jetton transfer message with forward payload
-4. Transaction execution
+2. Generate wallet contract
+3. Create transfer message
+4. Send transaction
 5. Status updates
 
 ## Security Best Practices
@@ -91,21 +78,15 @@ Access the application (usually at `http://localhost:4000`)
 1. Never commit mnemonics or API keys to version control
 2. Validate all input addresses
 3. Handle API errors appropriately
-4. Implement proper error handling for failed transfers
 
 ## Common Issues and Troubleshooting
 
-1. **Wallet Not Deployed Error**
-   - Ensure your wallet is properly deployed on testnet
-   - Verify mnemonic phrases are correct
-   - Check if you have sufficient balance for deployment
+1. **Transfer Failures**
+   - Verify recipient address is valid
+   - Ensure sufficient balance (more than 0.1 TON)
+   - Check network connectivity
 
-2. **Transfer Failures**
-   - Verify Jetton wallet address is correct
-   - Ensure recipient address is valid
-   - Check if amount is within valid range
-
-3. **API Key Issues**
+2. **API Key Issues**
    - Verify you're using a testnet API key
    - Ensure proper network connectivity
 

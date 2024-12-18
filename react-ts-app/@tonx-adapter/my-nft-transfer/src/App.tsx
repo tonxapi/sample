@@ -7,8 +7,8 @@ import {
   internal,
   external,
   storeMessage,
-  toNano
-} from '@ton/ton';
+  toNano,
+} from "@ton/ton";
 import { mnemonicToPrivateKey } from "@ton/crypto";
 import { ToncoreAdapter } from "@tonx/adapter";
 
@@ -18,10 +18,10 @@ export default function App() {
   const [nftAddress, setNftAddress] = useState("");
   const [status, setStatus] = useState("");
 
-  const mnemonic = ["your", "mnemonic"]
+  const mnemonic = ["your", "mnemonic"];
   const client = new ToncoreAdapter({
-    network: "testnet",
-    apiKey: import.meta.env.VITE_TONXAPI_KEY
+    network: "testnet", // testnet or mainnet
+    apiKey: import.meta.env.VITE_TONXAPI_KEY,
   });
 
   const handleTransfer = async () => {
@@ -36,7 +36,7 @@ export default function App() {
       // Initialize wallet
       const wallet = WalletContractV4.create({
         workchain: 0,
-        publicKey
+        publicKey,
       });
       const walletAddress = wallet.address.toString({
         urlSafe: true,
@@ -47,32 +47,31 @@ export default function App() {
       // Check deployment status
       const { init } = wallet;
       const contractDeployed = await client.isContractDeployed(Address.parse(walletAddress));
-      const neededInit = (!contractDeployed && init) ? init : null;
+      const neededInit = !contractDeployed && init ? init : null;
 
       if (!contractDeployed) {
         throw new Error("Wallet not deployed");
       }
 
       // Get seqno
-      const seqno = await client.runMethod(Address.parse(walletAddress), 'seqno')
-        .then(res => res.stack.readNumber());
+      const seqno = await client.runMethod(Address.parse(walletAddress), "seqno").then((res) => res.stack.readNumber());
 
       setStatus("Creating NFT transfer message...");
       // Create NFT transfer message
       const messageBody = beginCell()
-        .storeUint(0x5fcc3d14, 32) // transfer OP code (TEP-62)
+        .storeUint(0x5fcc3d14, 32)
         .storeUint(Date.now(), 64) // query_id
         .storeAddress(Address.parse(recipientAddress)) // new_owner
         .storeAddress(Address.parse(walletAddress)) // response_destination
         .storeBit(0) // no custom_payload
-        .storeCoins(toNano('0.01')) // forward_amount
+        .storeCoins(toNano("0.01")) // forward_amount
         .storeBit(0) // no forward_payload
         .endCell();
 
       // Create internal message
       const internalMessage = internal({
         to: Address.parse(nftAddress),
-        value: toNano('0.05'),
+        value: toNano("0.05"),
         bounce: true,
         body: messageBody,
       });
@@ -90,25 +89,21 @@ export default function App() {
 
       setStatus("Sending transaction...");
       // Send transaction
-      const externalMessageCell = beginCell()
-        .store(storeMessage(externalMessage))
-        .endCell();
+      const externalMessageCell = beginCell().store(storeMessage(externalMessage)).endCell();
 
       const signedTransaction = externalMessageCell.toBoc();
       await client.sendFile(signedTransaction);
 
-      const hash = externalMessageCell.hash().toString('hex');
+      const hash = externalMessageCell.hash().toString("hex");
       console.log("message hash: " + hash);
       setStatus("Transfer successful!");
     } catch (error) {
-      console.error('Transfer failed:', error);
-      setStatus(`Transfer failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Transfer failed:", error);
+      setStatus(`Transfer failed: ${error instanceof Error ? error.message : "Unknown error"}`);
     } finally {
       setIsLoading(false);
     }
   };
-
-
 
   return (
     <div className="container">
@@ -146,7 +141,6 @@ export default function App() {
             </div>
           )}
         </div>
-
       </header>
     </div>
   );

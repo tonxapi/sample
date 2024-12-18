@@ -13,7 +13,7 @@ export default function App() {
   const [accountBalance, setAccountBalance] = useState<string>("No connection");
   const [lastTransaction, setLastTransaction] = useState<Transaction | string>("No connection");
   const [isLoading, setIsLoading] = useState(false);
-  const myUsdtAddress = Address.parse("UQBv3exBKLmQcn2Fm6VlntAInW-je1YP4U59gJxaO62NCyMn");
+  const TONAddress = Address.parse("UQBv3exBKLmQcn2Fm6VlntAInW-je1YP4U59gJxaO62NCyMn");
 
   // Step 1: init TONX client
   const client = new ToncoreAdapter({
@@ -26,12 +26,12 @@ export default function App() {
 
     try {
       // Step 2: Fetch the latest transfer-in
-      const transactions = await client.getTransactions(myUsdtAddress, { limit: 1 });
+      const transactions = await client.getTransactions(TONAddress, { limit: 1 });
 
       setLastTransaction({ transaction_hash: transactions[0].hash().toString("hex") || "No transaction found" });
 
-      // Step 3: Fetch USDT balance
-      const balance = await client.getBalance(myUsdtAddress);
+      // Step 3: Fetch Jetton balance
+      const balance = await client.getBalance(TONAddress);
       setAccountBalance(balance.toString());
     } catch (error) {
       setAccountBalance("Error fetching balance");
@@ -66,11 +66,11 @@ export default function App() {
           </div>
         </div>
 
-        <h1>Get My Jetton Lastest transfer-in</h1>
+        <h1>Get My TON Lastest transfer-in</h1>
 
         <div className="card">
           <div className="mb-2">
-            <h2>Jetton Balance</h2>
+            <h2>Balance</h2>
             <div className="transaction-container">
               <span className="transaction-hash">{accountBalance}</span>
             </div>

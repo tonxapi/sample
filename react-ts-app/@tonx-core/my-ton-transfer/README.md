@@ -1,93 +1,106 @@
-# TONX API TON Transfer Application
+# TON Transfer Application
 
-This application demonstrates how to implement TON transfers using the TONX SDK in a React environment.
+A React application that enables TON transfers using the TONX SDK.
 
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) (v16 or higher recommended)
 - [pnpm](https://pnpm.io/) package manager
+- TypeScript knowledge for development
 
 ## Environment Setup
 
-1. Install pnpm if you haven't already:
+1. Install pnpm globally:
 ```bash
 npm install -g pnpm
 ```
 
-2. Install dependencies:
+2. Install project dependencies:
 ```bash
 pnpm install
 ```
 
-3. Create a `.env` file in the root directory:
-```env
-VITE_TONXAPI_KEY=your_testnet_api_key_here
-```
-
 ## Important Configuration Notes
+
+### Network Configuration
+
+1. The application is configured for testnet use. Ensure correct network setting:
+```typescript
+const provider = new TONXJsonRpcProvider({
+  network: "testnet", // Keep this as testnet for development
+  apiKey: import.meta.env.VITE_TONXAPI_KEY,
+});
+```
 
 ### Wallet Configuration
 
-1. This application uses **WalletContractV4**. Make sure you're using the correct wallet version:
-```javascript
-import { WalletContractV4 } from '@ton/ton';
+This application uses WalletContractV4. You need to:
+
+1. Configure your mnemonic phrases:
+```typescript
+const MNEMONIC = ['your', 'mnemonic'];  // Replace with your mnemonic phrases
 ```
 
-2. Mnemonic Setup:
-```javascript
-// Replace with your actual mnemonic phrases
-const MNEMONIC = ["word1", "word2", "word3", ... "word24"];
-```
-
-### API Key Configuration
-
-1. Get your API key from [dashboard.tonxapi.com](https://dashboard.tonxapi.com)
-2. **Important**: This application is configured for the testnet. Make sure to use a testnet API key, not a mainnet key.
-
-### Wallet Initialization Requirement
-
-⚠️ **Critical**: The wallet must be initialized before attempting any transfers.
-
-- The application checks for wallet deployment before processing transfers
-- Uninitiated wallets will result in a 400 error
-- Make sure to deploy and initialize your wallet before using it for transfers
-
-Example wallet deployment check in the code:
-```javascript
-const contractDeployed = await provider.getAddressState(walletAddress);
+2. **Important**: The wallet must be deployed before attempting transfers
+```typescript
 if (!contractDeployed) {
   throw new Error("Wallet not deployed");
 }
 ```
 
-## Security Best Practices
+### API Key Setup
 
-1. Never commit your mnemonic phrases or API keys to version control
-2. Store sensitive information in environment variables
-3. Use the `.env` file for local development:
-```javascript
-// Access API key safely from environment variables
-apiKey: import.meta.env.VITE_TONXAPI_KEY
-```
+1. Get your API key from [dashboard.tonxapi.com](https://dashboard.tonxapi.com)
+2. **Important**: Use a testnet API key
+
+## Features
+
+- Transfer TON between addresses
+- Support for WalletContractV4
+- Real-time transfer status updates
+- Error handling and validation
+- Loading state management
 
 ## Running the Application
 
-1. Start the development server:
+Start the development server:
 ```bash
 pnpm dev
 ```
 
+Access the application (usually at `http://localhost:4000`)
+
+## Component Functionality
+
+### Transfer Process
+1. Input validation
+2. Wallet deployment check
+3. Transfer message creation
+4. Transaction execution
+5. Status updates
+
+## Security Best Practices
+
+1. Never commit mnemonics or API keys to version control
+2. Validate all input addresses
+3. Handle API errors appropriately
+4. Implement proper error handling for failed transfers
+
 ## Common Issues and Troubleshooting
 
-1. **400 Error on Transfer**
-   - Check if your wallet is properly initialized
-   - Verify your wallet version matches WalletContractV4
-   - Ensure sufficient balance for the transfer
+1. **Wallet Not Deployed Error**
+   - Ensure your wallet is properly deployed on testnet
+   - Verify mnemonic phrases are correct
+   - Check if you have sufficient balance for deployment
 
-2. **API Key Issues**
+2. **Transfer Failures**
+   - Verify recipient address is valid
+   - Ensure sufficient balance for transfer
+   - Check if amount is within valid range
+
+3. **API Key Issues**
    - Verify you're using a testnet API key
-   - Check if the API key is properly set in your .env file
-   - Ensure the environment variable is correctly accessed in the code
+   - Ensure proper network connectivity
 
 ## Additional Resources
 
