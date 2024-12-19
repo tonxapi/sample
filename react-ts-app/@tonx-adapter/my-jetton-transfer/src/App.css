@@ -252,6 +252,29 @@ a:hover::after {
   animation: shimmer 1.5s infinite;
 }
 
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.step-number {
+  width: 2rem;
+  height: 2rem;
+  background: var(--primary-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
 @keyframes shimmer {
   100% {
     transform: translateX(100%);

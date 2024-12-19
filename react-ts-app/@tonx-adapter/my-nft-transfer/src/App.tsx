@@ -108,7 +108,29 @@ export default function App() {
   return (
     <div className="container">
       <header className="header">
-        <h1>TON NFT Transfer</h1>
+        <h1>3 Steps to Transfer NFT</h1>
+        <div className="card">
+          <div className="steps">
+            <div className="step">
+              <div className="step-number">1</div>
+              <p>
+                Get your API key on{" "}
+                <a href="https://dashboard.tonxapi.com" target="_blank" rel="noopener noreferrer">
+                  dashboard.tonxapi.com
+                </a>
+              </p>
+            </div>
+            <div className="step">
+              <div className="step-number">2</div>
+              <p>Install TONX SDK</p>
+            </div>
+            <div className="step">
+              <div className="step-number">3</div>
+              <p>Enjoy!</p>
+            </div>
+          </div>
+        </div>
+
 
         <div className="card">
           <h2>Transfer NFT</h2>
