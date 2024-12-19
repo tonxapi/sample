@@ -23,10 +23,15 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, sans-serif;
   line-height: 1.5;
   color: var(--text-primary);
-  background: linear-gradient(135deg, var(--background-dark), var(--background-light));
+  background: linear-gradient(
+    135deg,
+    var(--background-dark),
+    var(--background-light)
+  );
   min-height: 100vh;
 }
 
@@ -137,7 +142,11 @@ body {
 }
 
 .button {
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-hover)
+  );
   color: white;
   border: none;
   padding: 0.875rem 1.5rem;
@@ -163,7 +172,11 @@ body {
 .button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  background: linear-gradient(135deg, var(--text-secondary), var(--border-color));
+  background: linear-gradient(
+    135deg,
+    var(--text-secondary),
+    var(--border-color)
+  );
 }
 
 .status-container {
@@ -252,7 +265,12 @@ a:hover::after {
   right: 0;
   bottom: 0;
   left: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
   transform: translateX(-100%);
   animation: shimmer 1.5s infinite;
 }
@@ -303,7 +321,11 @@ a:hover::after {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(45deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.02)
+  );
   pointer-events: none;
   z-index: 1;
 }
