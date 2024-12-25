@@ -43,7 +43,7 @@ export default function App() {
   return (
     <div className="container">
       <header className="header">
-        <h1>3 Steps to TON</h1>
+        <h1>3 Steps to View TON Transactions</h1>
         <div className="card">
           <div className="steps">
             <div className="step">
