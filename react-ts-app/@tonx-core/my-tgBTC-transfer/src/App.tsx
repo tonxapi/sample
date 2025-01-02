@@ -16,6 +16,7 @@ const TgBTCTransfer = () => {
   const [amount, setAmount] = useState(0);
   const [transferAmount, setTransferAmount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuccessful, setIsSuccessful] = useState(false);
   const [jettonWallet, setJettonWallet] = useState('');
 
   const TGBTC_ADDRESS = '0:7D858A3DEF200FDA2B18C22485C66D4139B42B698F11985374D8943222CED4AA';
@@ -29,13 +30,14 @@ const TgBTCTransfer = () => {
 
   const getTgBTCAmount = async () => {
     const wallets = await client.getJettonWallets({ owner_address: wallet?.account.address });
-    const tgBTCWallet = wallets.find((w: { jetton: string; }) => w.jetton === TGBTC_ADDRESS);
+    const tgBTCWallet = wallets.find((wallet: { jetton: string; }) => wallet.jetton === TGBTC_ADDRESS);
     setAmount(tgBTCWallet.balance / JETTON_QUANTITY);
     setJettonWallet(tgBTCWallet.address);
   }
 
   const onClickSend = async () => {
     setIsLoading(true);
+    setIsSuccessful(false);
     try {
       const messageBody = beginCell()
         .storeUint(0xf8a7ea5, 32)
@@ -49,17 +51,17 @@ const TgBTCTransfer = () => {
         .storeRef(
           beginCell()
             .storeUint(0, 32)
-            .storeStringTail('Send by TONXAPI')
+            .storeStringTail('Send By TONX API')
             .endCell()
         )
-        .endCell();
+        .endCell().toBoc().toString('base64');
 
       await tonConnectUI.sendTransaction({
         validUntil: Math.floor(Date.now() / 1000) + 360,
         messages: [{
           address: jettonWallet,
           amount: "50000000",
-          payload: messageBody.toBoc().toString('base64')
+          payload: messageBody
         }]
       });
 
@@ -73,16 +75,20 @@ const TgBTCTransfer = () => {
   }
 
   const waitForTransactionConfirmation = async () => {
-    const initialCount = (await getTransferCount());
+    const TIMEOUT_SECONDS = 300;
+    const POLL_INTERVAL = 1000;
+    const initialTransactionLT = await getTransferCount();
 
-    for (let i = 0; i < 300; i++) {
+    for (let attempts = 0; attempts < TIMEOUT_SECONDS; attempts++) {
       try {
-        if (await getTransferCount() > initialCount) {
+        const currentTransactionLT = await getTransferCount();
+        if (currentTransactionLT > initialTransactionLT) {
+          setIsSuccessful(true);
           return;
         }
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, POLL_INTERVAL));
       } catch (error) {
-        console.error('Transfer check failed:', error);
+        console.error('Transaction check failed:', error);
       }
     }
     throw new Error('Transaction confirmation timeout');
@@ -94,7 +100,10 @@ const TgBTCTransfer = () => {
       jetton_master: TGBTC_ADDRESS,
       direction: 'out',
     });
-    return transfers.length;
+    if (!transfers?.[0]?.transaction_lt) {
+      return 0;
+    }
+    return parseInt(transfers[0].transaction_lt);
   };
 
   return (
@@ -143,6 +152,13 @@ const TgBTCTransfer = () => {
               <p>Processing transaction...</p>
             </div>
           )}
+
+          {
+            isSuccessful &&
+            (<div className="transaction-container">
+              <p>Successful</p>
+            </div>)
+          }
         </div> : <div className="card">
           <div className="text-center">
             <div className="balance-amount mb-2">

@@ -1,113 +1,75 @@
 # TON Jetton Transfer Application
 
-A React application that enables Jetton transfers using the TONX SDK.
+A React application for transferring tgBTC Jettons on TON blockchain using the TONX SDK and TonConnect.
 
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/) (v16 or higher recommended)
 - [pnpm](https://pnpm.io/) package manager
-- TypeScript knowledge for development
+- A TON wallet (Tonkeeper, OpenMask, etc.)
+- An account on [TONX API](https://dashboard.tonxapi.com) for API key
 
 ## Environment Setup
 
-1. Install pnpm globally:
+1. Install dependencies:
 ```bash
 npm install -g pnpm
 ```
-
 2. Install project dependencies:
 ```bash
 pnpm install
 ```
 
-## Important Configuration Notes
+3. Create a `.env` file in the root directory:
+```env
+VITE_TONXAPI_KEY=your_api_key_here
+```
 
-### Network Configuration
+## Configuration
 
-1. The application is configured for testnet use. Ensure correct network setting:
+### Network Settings
+The application is configured for testnet:
 ```typescript
-const provider = new TONXJsonRpcProvider({
-  network: "testnet", // Keep this as testnet for development
-  apiKey: import.meta.env.VITE_TONXAPI_KEY,
+const client = new TONXJsonRpcProvider({
+  network: 'testnet',
+  apiKey: import.meta.env.VITE_TONXAPI_KEY
 });
 ```
 
-### Wallet Configuration
-
-This application uses WalletContractV4. You need to:
-
-1. Configure your mnemonic phrases:
-```typescript
-const MNEMONIC = ['your', 'mnemonic'];  // Replace with your mnemonic phrases
-```
-
-2. **Important**: The wallet must be deployed before attempting transfers
-```typescript
-if (!contractDeployed) {
-  throw new Error("Wallet not deployed");
-}
-```
-
-### Required Addresses
-
-The application requires three inputs:
-1. Your Jetton Wallet Address
-2. Recipient's TON Address
-3. Amount of Jettons to transfer (will be multiplied by 10^6)
-
-### API Key Setup
-
-1. Get your API key from [dashboard.tonxapi.com](https://dashboard.tonxapi.com)
-2. **Important**: Use a testnet API key
-
 ## Features
 
-- Transfer Jettons between addresses
-- Support for WalletContractV4
-- Real-time transfer status updates
-- Error handling and validation
-- Loading state management
+- Connect TON wallet using TonConnect
+- View tgBTC balance
+- Transfer tgBTC to other addresses
+- Real-time transaction confirmation
+- Loading and success states
+- User-friendly error handling
 
 ## Running the Application
 
-Start the development server:
+1. Start the development server:
 ```bash
 pnpm dev
 ```
 
-Access the application (usually at `http://localhost:4000`)
+2. Access the application (default: `http://localhost:4000`)
 
-## Component Functionality
+## Common Issues and Solutions
 
-### Transfer Process
-1. Input validation
-2. Wallet deployment check
-3. Create jetton transfer message with forward payload
-4. Transaction execution
-5. Status updates
+1. **Transaction Not Confirming**
+   - Check if recipient address is valid
+   - Ensure sufficient TON balance for fees
+   - Verify tgBTC balance is sufficient
 
-## Security Best Practices
+2. **API Issues**
+   - Confirm API key is valid
+   - Check network connection
+   - Verify testnet configuration
 
-1. Never commit mnemonics or API keys to version control
-2. Validate all input addresses
-3. Handle API errors appropriately
-4. Implement proper error handling for failed transfers
-
-## Common Issues and Troubleshooting
-
-1. **Wallet Not Deployed Error**
-   - Ensure your wallet is properly deployed on testnet
-   - Verify mnemonic phrases are correct
-   - Check if you have sufficient balance for deployment
-
-2. **Transfer Failures**
-   - Verify Jetton wallet address is correct
-   - Ensure recipient address is valid
-   - Check if amount is within valid range
-
-3. **API Key Issues**
-   - Verify you're using a testnet API key
-   - Ensure proper network connectivity
+3. **Wallet Connection Issues**
+   - Ensure wallet is installed
+   - Check if wallet supports testnet
+   - Verify wallet has sufficient balance
 
 ## Additional Resources
 
