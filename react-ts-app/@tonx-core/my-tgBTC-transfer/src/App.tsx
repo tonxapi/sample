@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { TonConnectButton, useTonWallet, useTonConnectUI } from "@tonconnect/ui-react";
 import { TONXJsonRpcProvider } from "@tonx/core";
-import { Address, beginCell, toNano } from "@ton/core";
 
 const TgBTCTransfer = () => {
   const [tonConnectUI] = useTonConnectUI();
@@ -17,7 +16,6 @@ const TgBTCTransfer = () => {
   const [transferAmount, setTransferAmount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
-  const [jettonWallet, setJettonWallet] = useState("");
 
   const TGBTC_ADDRESS = "0:7D858A3DEF200FDA2B18C22485C66D4139B42B698F11985374D8943222CED4AA";
   const JETTON_QUANTITY = 100000000;
@@ -32,36 +30,17 @@ const TgBTCTransfer = () => {
     const wallets = await client.getJettonWallets({ owner_address: wallet?.account.address });
     const tgBTCWallet = wallets.find((wallet: { jetton: string }) => wallet.jetton === TGBTC_ADDRESS);
     setAmount(tgBTCWallet.balance / JETTON_QUANTITY);
-    setJettonWallet(tgBTCWallet.address);
   };
 
   const onClickSend = async () => {
     setIsLoading(true);
     setIsSuccessful(false);
     try {
-      const messageBody = beginCell()
-        .storeUint(0xf8a7ea5, 32)
-        .storeUint(0, 64)
-        .storeCoins(BigInt((transferAmount * JETTON_QUANTITY).toFixed(0)))
-        .storeAddress(Address.parse(recipientAddress))
-        .storeAddress(Address.parse(wallet?.account.address as string))
-        .storeBit(0)
-        .storeCoins(toNano("0.02"))
-        .storeBit(1)
-        .storeRef(beginCell().storeUint(0, 32).storeStringTail("Send By TONX API").endCell())
-        .endCell()
-        .toBoc()
-        .toString("base64");
-
+      const payload = await getTransferPayload();
+      console.log(payload);
       await tonConnectUI.sendTransaction({
         validUntil: Math.floor(Date.now() / 1000) + 360,
-        messages: [
-          {
-            address: jettonWallet,
-            amount: "50000000",
-            payload: messageBody,
-          },
-        ],
+        messages: [{ ...payload.result }],
       });
 
       await waitForTransactionConfirmation();
@@ -71,6 +50,28 @@ const TgBTCTransfer = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const getTransferPayload = async () => {
+    const response = fetch(`https://testnet-rpc.tonxapi.com/v2/json-rpc/${import.meta.env.VITE_TONXAPI_KEY}`, {
+      method: "POST",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        id: 1,
+        jsonrpc: "2.0",
+        method: "getTgBTCTransferPayload",
+        params: {
+          amount: transferAmount * JETTON_QUANTITY,
+          destination: recipientAddress,
+          source: wallet?.account.address,
+          comment: "From TONX API",
+        },
+      }),
+    });
+    return (await response).json();
   };
 
   const waitForTransactionConfirmation = async () => {
