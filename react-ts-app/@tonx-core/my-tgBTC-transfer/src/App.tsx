@@ -37,7 +37,6 @@ const TgBTCTransfer = () => {
     setIsSuccessful(false);
     try {
       const payload = await getTransferPayload();
-      console.log(payload);
       await tonConnectUI.sendTransaction({
         validUntil: Math.floor(Date.now() / 1000) + 360,
         messages: [{ ...payload.result }],
