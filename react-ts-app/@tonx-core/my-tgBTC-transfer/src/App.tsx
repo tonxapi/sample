@@ -63,7 +63,7 @@ const TgBTCTransfer = () => {
         jsonrpc: "2.0",
         method: "getTgBTCTransferPayload",
         params: {
-          amount: transferAmount * JETTON_QUANTITY,
+          amount: parseInt(String(transferAmount * JETTON_QUANTITY)),
           destination: recipientAddress,
           source: wallet?.account.address,
           comment: "From TONX API",
