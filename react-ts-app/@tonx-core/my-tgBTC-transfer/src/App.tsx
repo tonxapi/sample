@@ -17,7 +17,6 @@ const TgBTCTransfer = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
 
-  const TGBTC_ADDRESS = "0:7D858A3DEF200FDA2B18C22485C66D4139B42B698F11985374D8943222CED4AA";
   const JETTON_QUANTITY = 100000000;
 
   useEffect(() => {
@@ -27,8 +26,8 @@ const TgBTCTransfer = () => {
   }, [wallet]);
 
   const getTgBTCAmount = async () => {
-    const wallets = await client.getJettonWallets({ owner_address: wallet?.account.address });
-    const tgBTCWallet = wallets.find((wallet: { jetton: string }) => wallet.jetton === TGBTC_ADDRESS);
+    const jettonWallets = await client.getTgBTCWalletAddressByOwner({ owner_address: wallet?.account.address });
+    const tgBTCWallet = await client.getTgBTCBalance({ address: jettonWallets.address });
     setAmount(tgBTCWallet.balance / JETTON_QUANTITY);
   };
 
@@ -36,10 +35,15 @@ const TgBTCTransfer = () => {
     setIsLoading(true);
     setIsSuccessful(false);
     try {
-      const payload = await getTransferPayload();
+      const payload = await client.getTgBTCTransferPayload({
+        amount: transferAmount * JETTON_QUANTITY,
+        destination: recipientAddress,
+        source: wallet?.account.address,
+        comment: "From TONX API",
+      });
       await tonConnectUI.sendTransaction({
         validUntil: Math.floor(Date.now() / 1000) + 360,
-        messages: [{ ...payload.result }],
+        messages: [{ ...payload }],
       });
 
       await waitForTransactionConfirmation();
@@ -49,28 +53,6 @@ const TgBTCTransfer = () => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const getTransferPayload = async () => {
-    const response = fetch(`https://testnet-rpc.tonxapi.com/v2/json-rpc/${import.meta.env.VITE_TONXAPI_KEY}`, {
-      method: "POST",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        id: 1,
-        jsonrpc: "2.0",
-        method: "getTgBTCTransferPayload",
-        params: {
-          amount: transferAmount * JETTON_QUANTITY,
-          destination: recipientAddress,
-          source: wallet?.account.address,
-          comment: "From TONX API",
-        },
-      }),
-    });
-    return (await response).json();
   };
 
   const waitForTransactionConfirmation = async () => {
@@ -94,9 +76,8 @@ const TgBTCTransfer = () => {
   };
 
   const getTransferCount = async () => {
-    const transfers = await client.getJettonTransfers({
+    const transfers = await client.getTgBTCTransfers({
       address: wallet?.account.address,
-      jetton_master: TGBTC_ADDRESS,
       direction: "out",
     });
     if (!transfers?.[0]?.transaction_lt) {
