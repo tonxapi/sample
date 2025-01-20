@@ -36,7 +36,7 @@ const TgBTCTransfer = () => {
     setIsSuccessful(false);
     try {
       const payload = await client.getTgBTCTransferPayload({
-        amount: transferAmount * JETTON_QUANTITY,
+        amount: parseInt(String(transferAmount * JETTON_QUANTITY)),
         destination: recipientAddress,
         source: wallet?.account.address,
         comment: "From TONX API",
