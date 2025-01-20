@@ -14,7 +14,7 @@
     "@ton/crypto": "^3.3.0",
     "@ton/ton": "^15.1.0",
     "@tonconnect/ui-react": "^2.0.9",
-    "@tonx/core": "^1.1.5",
+    "@tonx/core": "^1.2.0",
     "buffer": "^6.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
