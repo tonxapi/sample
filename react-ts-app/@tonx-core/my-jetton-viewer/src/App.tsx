@@ -9,10 +9,11 @@ interface Transaction {
 }
 
 export default function App() {
-  const [accountBalance, setAccountBalance] = useState<string>("No connection");
+  const [accountBalance, setAccountBalance] = useState<string | number>("No connection");
   const [lastTransaction, setLastTransaction] = useState<Transaction | string>("No connection");
   const [isLoading, setIsLoading] = useState(false);
-  const myJettonAddress = "UQBm2-oK4u9CP56wS4LaPUWV-meDmNnSaD9Jlt-FyRHoBimJ";
+  const myTONAddress = "0QBDoT5Nkq7mfMusUKEhO_0o-9U3pT4ekjrMlUwi6VQrRXIz";
+  const myJettonAddress = "kQAc7C7K-VLCmMx37Ur56W4nDjNhRF1yipq8Gf9-Kllw3yv_"
 
   // Step 1: init TONX client
   const client = new TONXJsonRpcProvider({
@@ -24,12 +25,11 @@ export default function App() {
     setIsLoading(true);
     try {
       // Step 2: Fetch the latest transfer-in
-      const transactions = await client.getJettonTransfers({ address: myJettonAddress, direction: "in" });
+      const transactions = await client.getJettonTransfers({ address: myTONAddress });
       setLastTransaction(transactions[0].transaction_hash || "No transaction found");
-
       // Step 3: Fetch Jetton balance
-      const balance = await client.getTokenData(transactions[0].source_wallet);
-      setAccountBalance(balance.balance / 1000000);
+      const balance = await client.getJettonWallets({ address: myJettonAddress });
+      setAccountBalance(parseInt(balance[0].balance) / 1000000);
     } catch (error) {
       setAccountBalance("Error fetching balance");
       setLastTransaction("Error fetching transaction");
