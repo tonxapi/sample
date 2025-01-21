@@ -3,6 +3,16 @@ import "./App.css";
 import { TonConnectButton, useTonWallet, useTonConnectUI } from "@tonconnect/ui-react";
 import { TONXJsonRpcProvider } from "@tonx/core";
 
+interface APIError {
+  response: {
+    data: {
+      error: {
+        message: string;
+      };
+    };
+  };
+}
+
 const TgBTCTransfer = () => {
   const [tonConnectUI] = useTonConnectUI();
   const wallet = useTonWallet();
@@ -16,12 +26,17 @@ const TgBTCTransfer = () => {
   const [transferAmount, setTransferAmount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccessful, setIsSuccessful] = useState(false);
+  const [initialTransactionLT, setInitialTransactionLT] = useState(0);
 
   const JETTON_QUANTITY = 100000000;
 
   useEffect(() => {
     if (wallet) {
-      getTgBTCAmount();
+      (async () => {
+        await getTgBTCAmount();
+        const lt = await getLatestTransactionLT();
+        setInitialTransactionLT(lt);
+      })();
     }
   }, [wallet]);
 
@@ -58,27 +73,28 @@ const TgBTCTransfer = () => {
   const waitForTransactionConfirmation = async () => {
     const TIMEOUT_SECONDS = 300;
     const POLL_INTERVAL = 1000;
-    const initialTransactionLT = await getTransferCount();
 
     for (let attempts = 0; attempts < TIMEOUT_SECONDS; attempts++) {
       try {
-        const currentTransactionLT = await getTransferCount();
+        const currentTransactionLT = await getLatestTransactionLT();
         if (currentTransactionLT > initialTransactionLT) {
           setIsSuccessful(true);
           return;
         }
         await new Promise((resolve) => setTimeout(resolve, POLL_INTERVAL));
       } catch (error) {
+        if ((error as APIError).response.data.error.message === 'ResourceNotFound') {
+          continue;
+        }
         console.error("Transaction check failed:", error);
       }
     }
     throw new Error("Transaction confirmation timeout");
   };
 
-  const getTransferCount = async () => {
+  const getLatestTransactionLT = async () => {
     const transfers = await client.getTgBTCTransfers({
-      address: wallet?.account.address,
-      direction: "out",
+      address: wallet?.account.address
     });
     if (!transfers?.[0]?.transaction_lt) {
       return 0;
