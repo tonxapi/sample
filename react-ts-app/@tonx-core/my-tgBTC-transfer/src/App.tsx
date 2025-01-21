@@ -71,7 +71,7 @@ const TgBTCTransfer = () => {
   };
 
   const waitForTransactionConfirmation = async () => {
-    const TIMEOUT_SECONDS = 300;
+    const TIMEOUT_SECONDS = 180;
     const POLL_INTERVAL = 1000;
 
     for (let attempts = 0; attempts < TIMEOUT_SECONDS; attempts++) {
